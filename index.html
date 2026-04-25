@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pisii tengikk<3</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+    body {
+      background: url('bck.jpeg') no-repeat center center/cover;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      background: rgba(0,0,0,0.6);
+      opacity: 100%;
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .left { flex: 1; }
+
+    .right {
+      flex: 1;
+      background: rgba(255,255,255,0.1);
+      opacity: 100%;
+      border-radius: 10px;
+      padding: 15px;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+
+    .lyrics-line {
+      opacity: 0.4;
+      transition: all 0.3s ease;
+      padding: 5px 0;
+    }
+
+    .active {
+      opacity: 10;
+      color: #00ffcc;
+      transform: scale(1.05);
+    }
+
+    audio { width: 100%; margin-top: 20px; }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="left">
+    <h2>Shape of My Heart</h2>
+    <p>Lucu tidaaaaaa?????</p>
+
+    <audio id="audio" controls>
+      <source src="musek.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <div class="right" id="lyricsBox"></div>
+</div>
+
+<script>
+// Format: [time (detik), text]
+const lyrics = [
+  [0, "I'm lookin' back on things I've done"],
+  [6, "I never wanna play the same old part"],
+  [12, "I'll keep you in the dark (keep you in the dark)"],
+  [16, "Now let me show you the shape of my heart"],
+  [20, "Looking back on the things I've done"],
+  [24, "I was trying to be someone (trying to be someone)"],
+  [31, "I played my part, kept you in the dark"],
+  [34, "Now let me show you the shape of my heart"],
+  [40, "Looking back on the things I've done"],
+  [44, "I was trying to be someone"],
+  [49, "I played my part, kept you in the dark"],
+  [54, "Now let me show you the shape of"]
+];
+
+const audio = document.getElementById('audio');
+const box = document.getElementById('lyricsBox');
+
+// render lyrics
+lyrics.forEach((line, index) => {
+  const div = document.createElement('div');
+  div.classList.add('lyrics-line');
+  div.setAttribute('data-time', line[0]);
+  div.innerText = line[1];
+  box.appendChild(div);
+});
+
+const lines = document.querySelectorAll('.lyrics-line');
+
+// sync + auto scroll
+audio.addEventListener('timeupdate', () => {
+  let currentTime = audio.currentTime;
+
+  lines.forEach((line, i) => {
+    let time = parseFloat(line.getAttribute('data-time'));
+
+    if (currentTime >= time) {
+      lines.forEach(l => l.classList.remove('active'));
+      line.classList.add('active');
+
+      // auto scroll
+      line.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
